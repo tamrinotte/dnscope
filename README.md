@@ -35,8 +35,6 @@ __domain:__ Target domain (e.g., example.com).
 
 __--wordlist WORDLIST:__ Subdomains wordlist file.
 
-__--json:__ Output in JSON format.
-
 <br>
 
 ## Examples
@@ -46,9 +44,6 @@ __--json:__ Output in JSON format.
 
 2)
        dnscope example.com --wordlist subdomain.txt
-
-3)
-       dnscope example.com --wordlist subdomain.txt --json
 
 
 ---
@@ -90,8 +85,6 @@ __domain:__ Hedef alan adı (ör. example.com).
 
 __--wordlist WORDLIST:__ Alt alan adları kelime listesi dosyası.
 
-__--json:__ JSON biçiminde çıkartır.
-
 <br>
 
 ## Örnekler
@@ -101,6 +94,3 @@ __--json:__ JSON biçiminde çıkartır.
 
 2)
        dnscope example.com --wordlist subdomain.txt
-
-3)
-       dnscope example.com --wordlist subdomain.txt --json
