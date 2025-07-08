@@ -1,5 +1,5 @@
 # DNScope
-![DNScopeLogo](https://raw.githubusercontent.com/tamrinotte/dnscope/main/app_images/dnscope_logo.png)
+![DNScopeLogo](https://raw.githubusercontent.com/tamrinotte/dnscope/go/app_images/dnscope_logo.png)
 
 DNScope is a lightweight, Go-based reconnaissance utility designed for cybersecurity professionals, penetration testers, and digital investigators. The tool automates DNS and WHOIS metadata gathering for any target domain, providing a comprehensive snapshot of its public-facing infrastructure.
 
@@ -49,7 +49,7 @@ __wordlist:__ Subdomains wordlist file.
 ---
 
 # DNScope
-![DNScopeLogo](https://raw.githubusercontent.com/tamrinotte/dnscope/main/app_images/dnscope_logo.png)
+![DNScopeLogo](https://raw.githubusercontent.com/tamrinotte/dnscope/go/app_images/dnscope_logo.png)
 
 DNScope, siber güvenlik uzmanları, penetrasyon test uzmanları ve dijital araştırmacılar için tasarlanmış, hafif ve Go tabanlı bir keşif aracıdır. Bu araç, hedef alan adının DNS ve WHOIS meta verilerini otomatik olarak toplayarak, kamuya açık altyapısının kapsamlı bir özetini sunar.
 
