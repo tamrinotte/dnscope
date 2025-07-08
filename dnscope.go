@@ -25,6 +25,9 @@ func main() {
 	flag.Usage = func() {
 		fmt.Println("Usage: dnscope [flags]")
 		flag.PrintDefaults()
+		fmt.Println("\nExamples:")
+		fmt.Println("  dnscope -domain=example.com")
+		fmt.Println("  dnscope -domain=example.com -wordlist=subdomains.txt")
 	}
 	flag.Parse()
 	if *domainPointer != "" {
