@@ -22,15 +22,28 @@ import (
 func main() {
 	domainPointer := flag.String("domain", "example.com", "Target domain name.")
 	wordlistPointer := flag.String("wordlist", "subdomains.txt", "Path to your wordlist file.")
-	flag.Parse()
-	if *domainPointer == "" {
-		log.Fatalln("Please provide a domain name. Usage dnscope example.com")
+	flag.Usage = func() {
+		fmt.Println("Usage: dnscope [flags]")
+		flag.PrintDefaults()
 	}
-	getIPAddresses(*domainPointer)
-	getNameservers(*domainPointer)
-	getMXRecords(*domainPointer)
-	getWHOIS(*domainPointer)
-	getSubdomains(*wordlistPointer, *domainPointer)
+	flag.Parse()
+	if *domainPointer != "" {
+		getIPAddresses(*domainPointer)
+		getNameservers(*domainPointer)
+		getMXRecords(*domainPointer)
+		getWHOIS(*domainPointer)
+		if *wordlistPointer != "" && !fileExists(*wordlistPointer) {
+			message := fmt.Sprintf("\nWordlist file '%s' does not exist. Skipping subdomain scan.\n", *wordlistPointer)
+			fmt.Println(message)
+		} else if *wordlistPointer == "" {
+			fmt.Println("\nSkipping subdomain scan. Use -wordlist flag to specify a wordlist file.")
+		} else {
+			getSubdomains(*wordlistPointer, *domainPointer)
+		}
+	} else {
+		flag.Usage()
+		os.Exit(1)
+	}
 }
 
 // ##############################
@@ -38,6 +51,14 @@ func main() {
 // # HELPER FUNCTIONS
 //
 // ##############################
+
+func fileExists(filename string) bool {
+	info, err := os.Stat(filename)
+	if os.IsNotExist(err) {
+		return false
+	}
+	return !info.IsDir()
+}
 
 func cleanDate(dateStr string) string {
     if dateStr == "" {
