@@ -1,7 +1,7 @@
 # DNScope
 ![DNScopeLogo](https://raw.githubusercontent.com/tamrinotte/dnscope/go/app_images/dnscope_logo.png)
 
-DNScope is a lightweight, Go-based reconnaissance utility designed for cybersecurity professionals, penetration testers, and digital investigators. The tool automates DNS and WHOIS metadata gathering for any target domain, providing a comprehensive snapshot of its public-facing infrastructure.
+DNScope is a lightweight, reconnaissance utility designed for cybersecurity professionals, penetration testers, and digital investigators. The tool automates DNS and WHOIS metadata gathering for any target domain, providing a comprehensive snapshot of its public-facing infrastructure.
 
 It enumerates vital information including the domain's IP address, MX records, nameservers, WHOIS registration data, and performs subdomain brute-forcing using a customizable wordlist.
 
@@ -45,13 +45,12 @@ __wordlist:__ Subdomains wordlist file.
 2)
        dnscope -domain=example.com -wordlist=subdomain.txt
 
-
 ---
 
 # DNScope
 ![DNScopeLogo](https://raw.githubusercontent.com/tamrinotte/dnscope/go/app_images/dnscope_logo.png)
 
-DNScope, siber güvenlik uzmanları, penetrasyon test uzmanları ve dijital araştırmacılar için tasarlanmış, hafif ve Go tabanlı bir keşif aracıdır. Bu araç, hedef alan adının DNS ve WHOIS meta verilerini otomatik olarak toplayarak, kamuya açık altyapısının kapsamlı bir özetini sunar.
+DNScope, siber güvenlik uzmanları, penetrasyon test uzmanları ve dijital araştırmacılar için tasarlanmış, hafif bir keşif aracıdır. Bu araç, hedef alan adının DNS ve WHOIS meta verilerini otomatik olarak toplayarak, kamuya açık altyapısının kapsamlı bir özetini sunar.
 
 DNScope; alan adının IP adresi, MX kayıtları, isim sunucuları, WHOIS kayıt bilgileri gibi kritik verileri listeler ve özelleştirilebilir bir kelime listesi kullanarak alt alan adı (subdomain) brute-force taraması gerçekleştirir.
 
