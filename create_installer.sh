@@ -37,7 +37,7 @@ fi
 
 # Create executable
 info "Creating standalone executable using PyInstaller..."
-pyinstaller --onefile --name=dnscope dnscope.py --collect-all=dns --collect-all=whois
+pyinstaller --onefile --name=dnscope dnscope.py
 
 # Setup package structure
 info "Creating package directory hierarchy..."
