@@ -1,7 +1,7 @@
 # DNScope
-![DNScopeLogo](https://raw.githubusercontent.com/tamrinotte/dnscope/main/app_images/dnscope_logo.png)
+![DNScopeLogo](https://raw.githubusercontent.com/tamrinotte/dnscope/python/app_images/dnscope_logo.png)
 
-DNScope is a lightweight, Python-based reconnaissance utility designed for cybersecurity professionals, penetration testers, and digital investigators. The tool automates DNS and WHOIS metadata gathering for any target domain, providing a comprehensive snapshot of its public-facing infrastructure.
+DNScope is a lightweight, reconnaissance utility designed for cybersecurity professionals, penetration testers, and digital investigators. The tool automates DNS and WHOIS metadata gathering for any target domain, providing a comprehensive snapshot of its public-facing infrastructure.
 
 It enumerates vital information including the domain's IP address, MX records, nameservers, WHOIS registration data, and performs subdomain brute-forcing using a customizable wordlist. With both human-readable and JSON output options, DNScope is ideal for integrating into automated recon pipelines or performing quick situational awareness checks during engagements.
 
@@ -15,11 +15,11 @@ Built to be clean, efficient, and easily portable, DNScope helps analysts uncove
 
 	- Kali
 
-	      curl -L https://github.com/tamrinotte/dnscope/releases/download/kali_v0.1.0/dnscope.deb -o dnscope.deb
+	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_kali_v0.1.0/dnscope.deb -o dnscope.deb
 
 	- Debian
 
-	      curl -L https://github.com/tamrinotte/dnscope/releases/download/debian_v0.1.0/dnscope.deb -o dnscope.deb
+	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_debian_v0.1.0/dnscope.deb -o dnscope.deb
 
 2) Start the installer.
 
@@ -49,9 +49,9 @@ __--wordlist WORDLIST:__ Subdomains wordlist file.
 ---
 
 # DNScope
-![DNScopeLogo](https://raw.githubusercontent.com/tamrinotte/dnscope/main/app_images/dnscope_logo.png)
+![DNScopeLogo](https://raw.githubusercontent.com/tamrinotte/dnscope/python/app_images/dnscope_logo.png)
 
-DNScope, siber güvenlik uzmanları, penetrasyon test uzmanları ve dijital araştırmacılar için tasarlanmış, hafif ve Python tabanlı bir keşif aracıdır. Bu araç, hedef alan adının DNS ve WHOIS meta verilerini otomatik olarak toplayarak, kamuya açık altyapısının kapsamlı bir özetini sunar.
+DNScope, siber güvenlik uzmanları, penetrasyon test uzmanları ve dijital araştırmacılar için tasarlanmış, hafif bir keşif aracıdır. Bu araç, hedef alan adının DNS ve WHOIS meta verilerini otomatik olarak toplayarak, kamuya açık altyapısının kapsamlı bir özetini sunar.
 
 DNScope; alan adının IP adresi, MX kayıtları, isim sunucuları, WHOIS kayıt bilgileri gibi kritik verileri listeler ve özelleştirilebilir bir kelime listesi kullanarak alt alan adı (subdomain) brute-force taraması gerçekleştirir. Hem okunabilir metin hem de JSON formatında çıktı verebilme seçeneği ile DNScope, otomatik keşif süreçlerine entegre etmek veya hızlı durum farkındalığı sağlamak için idealdir.
 
@@ -65,11 +65,11 @@ Temiz, verimli ve kolay taşınabilir şekilde tasarlanan DNScope, analistlerin 
 
 	- Kali
 
-	      curl -L https://github.com/tamrinotte/dnscope/releases/download/kali_v0.1.0/dnscope.deb -o dnscope.deb
+	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_kali_v0.1.0/dnscope.deb -o dnscope.deb
 
 	- Debian
 
-	      curl -L https://github.com/tamrinotte/dnscope/releases/download/debian_v0.1.0/dnscope.deb -o dnscope.deb
+	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_debian_v0.1.0/dnscope.deb -o dnscope.deb
 
 2) Yükleyiciyi başlatın.
 
