@@ -76,17 +76,50 @@ def get_nameservers(target_domain_name):
 def get_whois_info(target_domain_name):
     try:
         w = whois(target_domain_name)
-        debug(f"Raw whois data: {w}")
+        debug(f"Raw WHOIS data: {w}")
+
         print("=== WHOIS ===")
-        print(f"Registrar: {w.registrar}")
-        print(f"Registrant: {w.name}")
-        print(f"Creation Date: {str(w.creation_date)}")
-        print(f"Expiration Date: {str(w.expiration_date)}")
-        info("Whois info has been identified.")
+
+        # Core registrar and dates
+        print(f"Registrar: {w.registrar or 'N/A'}")
+        print(f"Registrant: {w.name or 'N/A'}")
+        print(f"Creation Date: {w.creation_date if w.creation_date else 'N/A'}")
+        print(f"Expiration Date: {w.expiration_date if w.expiration_date else 'N/A'}")
+
+        # Nameservers
+        nameservers = w.name_servers if w.name_servers else []
+        if isinstance(nameservers, str):
+            nameservers = [nameservers]
+        print(f"Nameservers: {', '.join(nameservers) if nameservers else 'N/A'}")
+
+        # Emails (registrant/admin/tech/abuse)
+        emails = w.emails if w.emails else []
+        if isinstance(emails, str):
+            emails = [emails]
+        print(f"Contact Emails: {', '.join(emails) if emails else 'N/A'}")
+
+        # Registrant organization
+        org = w.org or 'N/A'
+        print(f"Registrant Organization: {org}")
+
+        # Abuse contact (if sometimes in WHOIS)
+        abuse_contact = w.get('abuse_contact_email') or 'N/A'
+        print(f"Abuse Contact: {abuse_contact}")
+
+        # DNSSEC
+        dnssec = w.dnssec if w.dnssec else 'Not implemented'
+        print(f"DNSSEC: {dnssec}")
+
+        # Status
+        status = w.status if w.status else 'N/A'
+        print(f"Domain Status: {status}")
+
+        info("WHOIS information has been identified and displayed.")
+
     except Exception as e:
-        error(f"Error: {e}")
+        error(f"WHOIS lookup error: {e}")
         print("=== WHOIS ===")
-        print()
+        print("Failed to retrieve WHOIS information.")
 
 ##############################
 
