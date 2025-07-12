@@ -15,11 +15,11 @@ Built to be clean, efficient, and easily portable, DNScope helps analysts uncove
 
 	- Kali
 
-	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_kali_v0.1.0/dnscope.deb -o dnscope.deb
+	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_kali_v0.1.1/dnscope.deb -o dnscope.deb
 
 	- Debian
 
-	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_debian_v0.1.0/dnscope.deb -o dnscope.deb
+	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_debian_v0.1.1/dnscope.deb -o dnscope.deb
 
 2) Start the installer.
 
@@ -33,18 +33,32 @@ __-h, --help:__ Displays the help message.
 
 __domain:__ Target domain (e.g., example.com).
 
-__--wordlist WORDLIST:__ Subdomains wordlist file.
+__-dir:__ Enumerate directories.
+
+__-dns:__ Enumerate subdomains.
+
+__-gdi:__ Gather information about the target domain.
+
+__-w WORDLIST, --wordlist WORDLIST:__ Subdomains wordlist file.
 
 <br>
 
 ## Examples
 
 1)
-       dnscope example.com
+       dnscope example.com -gdi example.com
 
 2)
-       dnscope example.com --wordlist subdomain.txt
+       dnscope example.com -dns -w subdomains.txt
 
+3)
+       dnscope example.com -dir -w dirs.txt
+
+4)
+       dnscope example.com -gdi -dns -w subdomains.txt
+
+5)
+       dnscope example.com -gdi -dir -w dirs.txt
 
 ---
 
@@ -65,11 +79,11 @@ Temiz, verimli ve kolay taşınabilir şekilde tasarlanan DNScope, analistlerin 
 
 	- Kali
 
-	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_kali_v0.1.0/dnscope.deb -o dnscope.deb
+	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_kali_v0.1.1/dnscope.deb -o dnscope.deb
 
 	- Debian
 
-	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_debian_v0.1.0/dnscope.deb -o dnscope.deb
+	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_debian_v0.1.1/dnscope.deb -o dnscope.deb
 
 2) Yükleyiciyi başlatın.
 
@@ -83,6 +97,12 @@ __-h, --help:__ Yardım mesajını görüntüler.
 
 __domain:__ Hedef alan adı (ör. example.com).
 
+__-dir:__ Dizinleri numaralandırın.
+
+__-dns:__ Alt etki alanlarını numaralandırın.
+
+__-gdi:__ Hedef etki alanı hakkında bilgi toplayın.
+
 __--wordlist WORDLIST:__ Alt alan adları kelime listesi dosyası.
 
 <br>
@@ -90,7 +110,16 @@ __--wordlist WORDLIST:__ Alt alan adları kelime listesi dosyası.
 ## Örnekler
 
 1)
-       dnscope example.com
+       dnscope example.com -gdi example.com
 
 2)
-       dnscope example.com --wordlist subdomain.txt
+       dnscope example.com -dns -w subdomains.txt
+
+3)
+       dnscope example.com -dir -w dirs.txt
+
+4)
+       dnscope example.com -gdi -dns -w subdomains.txt
+
+5)
+       dnscope example.com -gdi -dir -w dirs.txt
