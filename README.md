@@ -46,7 +46,7 @@ __-w WORDLIST, --wordlist WORDLIST:__ Subdomains wordlist file.
 ## Examples
 
 1)
-       dnscope example.com -gdi example.com
+       dnscope example.com -gdi
 
 2)
        dnscope example.com -dns -w subdomains.txt
@@ -110,7 +110,7 @@ __--wordlist WORDLIST:__ Alt alan adları kelime listesi dosyası.
 ## Örnekler
 
 1)
-       dnscope example.com -gdi example.com
+       dnscope example.com -gdi
 
 2)
        dnscope example.com -dns -w subdomains.txt
