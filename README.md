@@ -65,7 +65,7 @@ __-w WORDLIST, --wordlist WORDLIST:__ Subdomains wordlist file.
 # DNScope
 ![DNScopeLogo](https://raw.githubusercontent.com/tamrinotte/dnscope/python/app_images/dnscope_logo.png)
 
-DNScope, siber güvenlik uzmanları, sızma test uzmanları ve dijital araştırmacılar için tasarlanmış hafif bir keşif aracıdır. Araç, etki alanıyla ilgili meta veri alımını, DNS numaralandırmasını ve dizin numaralandırmasını otomatikleştirerek hedef etki alanının genel kullanıma açık altyapısının ve erişilebilir dizinlerinin kapsamlı bir anlık görüntüsünü sağlar.
+DNScope, siber güvenlik uzmanları, penetrasyon test uzmanları ve dijital araştırmacılar için tasarlanmış hafif bir bilgi toplama aracıdır. Bu araç, bir hedef domaine ait metadata toplama, DNS sorgulama ve dizin tarama işlemlerini otomatikleştirerek, hedef domainin dışa açık altyapısı ve erişilebilir dizinlerine dair kapsamlı bir özet sunar.
 
 DNScope; alan adının IP adresi, MX kayıtları, isim sunucuları, WHOIS kayıt bilgileri gibi kritik verileri listeler ve özelleştirilebilir bir kelime listesi kullanarak alt alan adı (subdomain) brute-force taraması gerçekleştirir. Hem okunabilir metin hem de JSON formatında çıktı verebilme seçeneği ile DNScope, otomatik keşif süreçlerine entegre etmek veya hızlı durum farkındalığı sağlamak için idealdir.
 
