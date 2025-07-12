@@ -79,7 +79,7 @@ def main():
     parser = ArgumentParser(description="DNS & WHOIS Recon Tool")
     parser.add_argument("domain", help="Target domain (e.g., example.com)")
     parser.add_argument("-gdi", action="store_true", help="Gather information about the target domain.")
-    mod_group = parser.add_mutually_exclusive_group(required=True)
+    mod_group = parser.add_mutually_exclusive_group(required=False)
     mod_group.add_argument("-dns", action="store_true", help="Enumerate subdomains.")
     mod_group.add_argument("-dir", action="store_true", help="Enumerate directories.")
     parser.add_argument("-w", "--wordlist", default="wordlist.txt", help="Path to your wordlist file.")
