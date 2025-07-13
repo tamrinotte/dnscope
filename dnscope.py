@@ -19,6 +19,7 @@ class DNScope:
         is_domain_information_requested,
         is_dns_enumeration_requested,
         is_dir_enumeration_requested,
+        max_depth,
         wordlist_path,
     ):
         self.domain = domain
@@ -26,6 +27,8 @@ class DNScope:
         self.is_dns_enumeration_requested = is_dns_enumeration_requested
         self.is_dir_enumeration_requested = is_dir_enumeration_requested
         self.wordlist_path = wordlist_path
+        self.max_depth = max_depth
+        self.is_recursive = True if self.max_depth is not None else False
         self.results = {}
 
     ##############################
@@ -53,7 +56,12 @@ class DNScope:
     ##############################
 
     def perform_dir_enumeration(self):
-        get_dirs(target_domain_name=self.domain, wordlist_path=self.wordlist_path)
+        get_dirs(
+            target_domain_name=self.domain,
+            is_recursive=self.is_recursive,
+            max_depth=self.max_depth,
+            wordlist_path=self.wordlist_path,
+        )
 
     ##############################
 
@@ -82,6 +90,12 @@ def main():
     mod_group = parser.add_mutually_exclusive_group(required=False)
     mod_group.add_argument("-dns", action="store_true", help="Enumerate subdomains.")
     mod_group.add_argument("-dir", action="store_true", help="Enumerate directories.")
+    parser.add_argument(
+        "-r", "--recursive",
+        type=int,
+        default=3,
+        help="Enable recursive directory enumeration. Specify max depth."
+    )
     parser.add_argument("-w", "--wordlist", default="wordlist.txt", help="Path to your wordlist file.")
     args = parser.parse_args()
     dnscope = DNScope(
@@ -89,6 +103,7 @@ def main():
         is_domain_information_requested=args.gdi,
         is_dns_enumeration_requested=args.dns,
         is_dir_enumeration_requested=args.dir,
+        max_depth=args.recursive,
         wordlist_path=args.wordlist,
     )
     dnscope.start()

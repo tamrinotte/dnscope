@@ -142,4 +142,4 @@ release
 release_candidate
 uploads_backup
 uploads_old
-
+custom_software_solution
