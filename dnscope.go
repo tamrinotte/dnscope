@@ -22,7 +22,10 @@ func main() {
 		fmt.Println("\nExamples:")
 		fmt.Println("  dnscope -domain=example.com -gdi")
 		fmt.Println("  dnscope -domain=example.com -dns -wordlist=subdomains.txt")
-		fmt.Println("  dnscope -domain=example.com -dir -wordlist=dirs.txt -r=3")
+		fmt.Println("  dnscope -domain=example.com -dir -wordlist=dirs.txt")
+		fmt.Println("  dnscope -domain=example.com -gdi -dns -wordlist=subdomains.txt")
+		fmt.Println("  dnscope -domain=example.com -gdi -dir -wordlist=dirs.txt")
+		fmt.Println("  dnscope -domain=example.com -gdi -dir -wordlist=dirs.txt -r=3")
 	}
 
 	flag.Parse()
