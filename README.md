@@ -15,11 +15,11 @@ Built to be clean, efficient, and easily portable, DNScope helps analysts uncove
 
 	- Kali
 
-	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_kali_v0.1.1/dnscope.deb -o dnscope.deb
+	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_kali_v0.1.2/dnscope.deb -o dnscope.deb
 
 	- Debian
 
-	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_debian_v0.1.1/dnscope.deb -o dnscope.deb
+	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_debian_v0.1.2/dnscope.deb -o dnscope.deb
 
 2) Start the installer.
 
@@ -84,11 +84,11 @@ ilde geliştirilen DNScope, analistlerin açık internet üzerindeki meta verile
 
 	- Kali
 
-	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_kali_v0.1.1/dnscope.deb -o dnscope.deb
+	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_kali_v0.1.2/dnscope.deb -o dnscope.deb
 
 	- Debian
 
-	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_debian_v0.1.1/dnscope.deb -o dnscope.deb
+	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_debian_v0.1.2/dnscope.deb -o dnscope.deb
 
 2) Yükleyiciyi başlatın.
 
