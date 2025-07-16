@@ -3,7 +3,7 @@
 
 DNScope is a lightweight reconnaissance utility designed for cybersecurity professionals, penetration testers, and digital investigators. The tool automates domain related metadata retrieval, DNS enumeration, and directory enumeration, providing a comprehensive snapshot of a target domain’s public-facing infrastructure and accessible directories.
 
-It enumerates vital information including the domain's IP address, MX records, nameservers, WHOIS registration data, and performs subdomain brute-forcing using a customizable wordlist. With both human-readable and JSON output options, DNScope is ideal for integrating into automated recon pipelines or performing quick situational awareness checks during engagements.
+It enumerates vital information including the domain's IP address, MX records, nameservers, WHOIS registration data, and performs subdomain brute-forcing and directory brute-focrcing using a customizable wordlists.
 
 Built to be clean, efficient, and easily portable, DNScope helps analysts uncover open internet metadata and assess a domain’s external exposure surface with precision.
 
@@ -41,6 +41,8 @@ __-gdi:__ Gather information about the target domain.
 
 __-w WORDLIST, --wordlist WORDLIST:__ Subdomains wordlist file.
 
+__-r int:__ Max recursion depth for directory enumeration. (default 3).
+
 <br>
 
 ## Examples
@@ -60,17 +62,20 @@ __-w WORDLIST, --wordlist WORDLIST:__ Subdomains wordlist file.
 5)
        dnscope example.com -gdi -dir -w dirs.txt
 
+6)
+       dnscope example.com -gdi -dir -w dirs.txt -r 3
+
 ---
 
 # DNScope
 ![DNScopeLogo](https://raw.githubusercontent.com/tamrinotte/dnscope/python/app_images/dnscope_logo.png)
 
-DNScope, siber güvenlik uzmanları, penetrasyon test uzmanları ve dijital araştırmacılar için tasarlanmış hafif bir bilgi toplama aracıdır. Bu araç, bir hedef domaine ait metadata toplama, DNS sorgulama ve dizin tarama işlemlerini otomatikleştirerek, hedef domainin dışa açık altyapısı ve erişilebilir dizinlerine dair kapsamlı bir özet sunar.
+DNScope, siber güvenlik uzmanları, sızma testi uzmanları ve dijital araştırmacılar için tasarlanmış hafif bir keşif aracıdır. Bu araç, alan adıyla ilgili meta verilerin alınması, DNS taraması ve dizin taraması işlemlerini otomatikleştirerek, hedef alan adının halka açık altyapısı ve erişilebilir dizinleri hakkında kapsamlı bir görünüm sunar.
 
-DNScope; alan adının IP adresi, MX kayıtları, isim sunucuları, WHOIS kayıt bilgileri gibi kritik verileri listeler ve özelleştirilebilir bir kelime listesi kullanarak alt alan adı (subdomain) brute-force taraması gerçekleştirir. Hem okunabilir metin hem de JSON formatında çıktı verebilme seçeneği ile DNScope, otomatik keşif süreçlerine entegre etmek veya hızlı durum farkındalığı sağlamak için idealdir.
+Alan adının IP adresi, MX kayıtları, isim sunucuları, WHOIS kayıt bilgileri gibi kritik verileri toplar; ayrıca özelleştirilebilir kelime listeleri kullanarak alt alan adı ve dizin brute-force işlemleri gerçekleştirir.
 
-Temiz, verimli ve kolay taşınabilir şekilde tasarlanan DNScope, analistlerin açık internet meta verilerini ortaya çıkarmasına ve bir alan adının dışa açık yüzeyini hassasiyetle değerlendirmesine yardımcı olur.
-
+Temiz, verimli ve taşınabilir olacak şek
+ilde geliştirilen DNScope, analistlerin açık internet üzerindeki meta verileri keşfetmesini ve bir alan adının dışa açık yüzeyini hassasiyetle değerlendirmesini sağlar.
 <br>
 
 ## Kurulum
@@ -105,6 +110,8 @@ __-gdi:__ Hedef etki alanı hakkında bilgi toplayın.
 
 __--wordlist WORDLIST:__ Alt alan adları kelime listesi dosyası.
 
+__-r int:__ Web dizin taraması için maksimum yineleme derinliği. (varsayılan 3).
+
 <br>
 
 ## Örnekler
@@ -123,3 +130,6 @@ __--wordlist WORDLIST:__ Alt alan adları kelime listesi dosyası.
 
 5)
        dnscope example.com -gdi -dir -w dirs.txt
+
+6)
+       dnscope example.com -gdi -dir -w dirs.txt -r 3

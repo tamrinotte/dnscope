@@ -42,7 +42,7 @@ def get_subdomains(target_domain_name, wordlist_path):
             print(f"{index}) {subdomain}")
         end_time = time()
         duration = end_time - start_time
-        print(f"Duration: {duration:.2f} seconds.")
+        print(f"\nDuration: {duration:.2f} seconds.")
         info(f"Subdomain enumeration has been completed. Duration: {duration:.2f} seconds.")
     except Exception as e:
         error(f"Error: {e}")

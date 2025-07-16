@@ -74,8 +74,8 @@ def get_dirs(target_domain_name, is_recursive, max_depth, wordlist_path, max_wor
     found_dirs = []
 
     try:
-        with open(wordlist_path, 'r', encoding="utf-8") as f:
-            dir_list = [line.strip() for line in f if line.strip()]
+        with open(wordlist_path, 'r', encoding="utf-8") as wordlist_file:
+            dir_list = [line.strip() for line in wordlist_file if line.strip()]
 
         dirs_to_scan = Queue()
         dirs_to_scan.put((f"http://{target_domain_name}/", 0))
@@ -104,7 +104,7 @@ def get_dirs(target_domain_name, is_recursive, max_depth, wordlist_path, max_wor
                 for item in new_discovered:
                     dirs_to_scan.put(item)
 
-        print("\n=== Discovered Directories ===")
+        print("=== Discovered Directories ===")
         for index, (url, status_code) in enumerate(found_dirs, start=1):
             print(f"{index}) {url} [Status: {status_code}]")
 
@@ -114,4 +114,4 @@ def get_dirs(target_domain_name, is_recursive, max_depth, wordlist_path, max_wor
 
     except Exception as e:
         error(f"Error during directory enumeration: {e}")
-        print("\n=== Discovered Directories ===\nNone found due to an error.")
+        print("=== Discovered Directories ===\nNone found due to an error.")

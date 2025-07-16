@@ -93,7 +93,7 @@ def main():
     parser.add_argument(
         "-r", "--recursive",
         type=int,
-        default=3,
+        default=0,
         help="Enable recursive directory enumeration. Specify max depth."
     )
     parser.add_argument("-w", "--wordlist", default="wordlist.txt", help="Path to your wordlist file.")

@@ -135,5 +135,5 @@ def collect_domain_info(target_domain_name):
     get_whois_info(target_domain_name=target_domain_name)
     end_time = time()
     duration = end_time - start_time
-    print(f"Duration: {duration:.2f} seconds.")
+    print(f"\nDuration: {duration:.2f} seconds.")
     info(f"Domain information has been collected. Duration: {duration:.2f} seconds.")
