@@ -44,7 +44,6 @@ go build -o dnscope dnscope.go
 info "Creating package directory hierarchy..."
 mkdir -p "package/usr/bin"
 
-
 # Move executable
 info "Copying executable to package directory..."
 cp "${APP_NAME}" "package/usr/bin/"

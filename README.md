@@ -15,11 +15,11 @@ Built to be clean, efficient, and easily portable, DNScope helps analysts uncove
 
 	- Kali
 
-	      curl -L https://github.com/tamrinotte/dnscope/releases/download/go_kali_v1.2/dnscope.deb -o dnscope.deb
+	      curl -L https://github.com/tamrinotte/dnscope/releases/download/go_kali_v0.1.2/dnscope.deb -o dnscope.deb
 
 	- Debian
 
-	      curl -L https://github.com/tamrinotte/dnscope/releases/download/go_debian_v1.2/dnscope.deb -o dnscope.deb
+	      curl -L https://github.com/tamrinotte/dnscope/releases/download/go_debian_v0.1.2/dnscope.deb -o dnscope.deb
 
 2) Start the installer.
 
@@ -84,11 +84,11 @@ Temiz, verimli ve taşınabilir olacak şekilde geliştirilen DNScope, analistle
 
 	- Kali
 
-	      curl -L https://github.com/tamrinotte/dnscope/releases/download/go_kali_v1.2/dnscope.deb -o dnscope.deb
+	      curl -L https://github.com/tamrinotte/dnscope/releases/download/go_kali_v0.1.2/dnscope.deb -o dnscope.deb
 
 	- Debian
 
-	      curl -L https://github.com/tamrinotte/dnscope/releases/download/go_debian_v1.2/dnscope.deb -o dnscope.deb
+	      curl -L https://github.com/tamrinotte/dnscope/releases/download/go_debian_v0.1.2/dnscope.deb -o dnscope.deb
 
 2) Yükleyiciyi başlatın.
 
