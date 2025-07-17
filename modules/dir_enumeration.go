@@ -236,7 +236,7 @@ func GetDirs(targetDomain string, isRecursive bool, maxDepth int, wordlistPath s
 	<-done
 
 	// Print results
-	fmt.Println("\n=== Discovered Directories ===")
+	fmt.Println("=== Discovered Directories ===")
 	for i, dir := range foundDirs {
 		fmt.Printf("%d) %s [Status: %d]\n", i+1, dir.URL, dir.StatusCode)
 	}
