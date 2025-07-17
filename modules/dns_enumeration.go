@@ -27,7 +27,7 @@ const maxConcurrentLookups = 50
 // ##############################
 
 func GetSubdomains(targetDomain string, wordlistPath string) {
-	start := time.Now()
+	startTime := time.Now()
 	fmt.Println("=== Subdomains ===")
 
 	// Open wordlist file
@@ -98,6 +98,6 @@ func GetSubdomains(targetDomain string, wordlistPath string) {
 		log.Println("Error reading wordlist:", err)
 	}
 
-	duration := time.Since(start).Seconds()
-	fmt.Printf("DNS enumeration completed in %.2f seconds.\n", duration)
+	duration := time.Since(startTime).Seconds()
+	fmt.Printf("\nDuration: %.2f seconds.\n", duration)
 }

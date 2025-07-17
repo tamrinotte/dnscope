@@ -63,48 +63,55 @@ func LoadUserAgents() ([]string, error) {
 //
 // ##############################
 
-func GetDir(url string, fakeUserAgents []string, timeout time.Duration, retries int) (*DirResult, error) {
-    client := &http.Client{
-        Timeout: timeout,
-        // Default Redirect behavior is enabled, no change needed unless overridden
-    }
+func GetDir(url string, fakeUserAgent string, timeout time.Duration, retries int) (*DirResult, error) {
+	// Initialize a new http client
+	client := &http.Client{
+		Timeout: timeout,
+	}
 
-    for attempt := 0; attempt <= retries; attempt++ {
-        userAgent := "Mozilla/5.0"
-        if len(fakeUserAgents) > 0 {
-            userAgent = fakeUserAgents[rand.Intn(len(fakeUserAgents))]
-        }
+	for attempt := 0; attempt <= retries; attempt++ {
+		// Set the user agent
+		userAgent := "Mozilla/5.0"
+		if fakeUserAgent != "" {
+			userAgent = fakeUserAgent
+		}
 
-        req, err := http.NewRequest("GET", url, nil)
-        if err != nil {
-            return nil, fmt.Errorf("creating request failed: %w", err)
-        }
+		// Declare a new request
+		req, err := http.NewRequest("GET", url, nil)
+		if err != nil {
+			return nil, fmt.Errorf("creating request failed: %w", err)
+		}
 
-        req.Header.Set("User-Agent", userAgent)
-        req.Header.Set("Referer", url)
-        req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
-        req.Header.Set("Accept-Language", "en-US,en;q=0.9")
+		// Set request headers
+		req.Header.Set("User-Agent", userAgent)
+		req.Header.Set("Referer", url)
+		req.Header.Set("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+		req.Header.Set("Accept-Language", "en-US,en;q=0.9")
 
-        resp, err := client.Do(req)
-        if err != nil {
-            log.Printf("Request to %s failed (attempt %d/%d): %v", url, attempt+1, retries+1, err)
-            time.Sleep(500 * time.Millisecond) // Slightly longer backoff
-            continue
-        }
+		// Send a http request 
+		resp, err := client.Do(req)
+		if err != nil {
+			log.Printf("Request to %s failed (attempt %d/%d): %v", url, attempt+1, retries+1, err)
+			time.Sleep(500 * time.Millisecond)
+			continue
+		}
 
-        io.Copy(io.Discard, resp.Body)
-        resp.Body.Close()
+		// Ensure that the entire HTTP response body is read and then closed properly
+		io.Copy(io.Discard, resp.Body)
+		resp.Body.Close()
 
-        // Accept common success and redirect codes
-        if resp.StatusCode == 200 || resp.StatusCode == 301 || resp.StatusCode == 302 || resp.StatusCode == 403 {
-            return &DirResult{URL: url, StatusCode: resp.StatusCode}, nil
-        }
+		// Check the HTTP response code
+		if resp.StatusCode == 200 || resp.StatusCode == 301 || resp.StatusCode == 302 || resp.StatusCode == 403 {
+			// Return the directory if request gives an acceptable response status code
+			return &DirResult{URL: url, StatusCode: resp.StatusCode}, nil
+		}
 
-        // Continue on other codes without error to keep scanning
-        return nil, nil
-    }
+		// If the status code does not match any of those interesting codes, the function returns errors
+		return nil, nil
+	}
 
-    return nil, fmt.Errorf("all retries failed for %s", url)
+	// Return error 
+	return nil, fmt.Errorf("all retries failed for %s", url)
 }
 
 // ##############################
@@ -114,22 +121,33 @@ func GetDir(url string, fakeUserAgents []string, timeout time.Duration, retries 
 // ##############################
 
 func GetDirs(targetDomain string, isRecursive bool, maxDepth int, wordlistPath string, maxWorkers int) {
+	// Get the start time
 	startTime := time.Now()
 
+	// Load user agents
 	fakeUserAgents, err := LoadUserAgents()
 	if err != nil {
 		log.Println("Failed to load embedded fake user agents:", err)
 		fakeUserAgents = []string{}
 	}
 
+	// Pick one random user agent to use for all requests
+	rand.Seed(time.Now().UnixNano())
+	var selectedUserAgent string = fakeUserAgents[rand.Intn(len(fakeUserAgents))]
+
+	// Open the wordlist file
 	file, err := os.Open(wordlistPath)
 	if err != nil {
 		log.Printf("Failed to open wordlist file %s: %v\n", wordlistPath, err)
 		return
 	}
+	// Schedule to close the file
 	defer file.Close()
 
+	// Create an empty slice to store directories that you will scan
 	var directories []string
+
+	// Create a sanner to read a the file line by line
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
@@ -142,58 +160,66 @@ func GetDirs(targetDomain string, isRecursive bool, maxDepth int, wordlistPath s
 		return
 	}
 
+	// Custom data type called Job
 	type Job struct {
 		URL   string
 		Depth int
 	}
 
+	// Declare and initialize channels
 	jobs := make(chan Job)
 	results := make(chan *DirResult)
 
-	var wg sync.WaitGroup
-	var jobsWg sync.WaitGroup // tracks outstanding jobs
+	// Declare wait groups to track and wait goroutines to finish
+	var waitGroup sync.WaitGroup
+	var jobsWaitGroup sync.WaitGroup
 
+	// Set maxWorkers to twice of number of cpus available in your system if it's equal or less than 0
 	if maxWorkers <= 0 {
 		maxWorkers = runtime.NumCPU() * 2
 	}
 
+	// Create a worker that will scan a directory
 	worker := func() {
-		defer wg.Done()
+		defer waitGroup.Done()
 		for job := range jobs {
 			for _, dir := range directories {
 				fullURL := job.URL + dir
-				result, err := GetDir(fullURL, fakeUserAgents, 2500*time.Millisecond, 1)
+				result, err := GetDir(fullURL, selectedUserAgent, 2500*time.Millisecond, 1)
 				if err == nil && result != nil {
 					result.Depth = job.Depth
 					results <- result
 					if isRecursive && job.Depth < maxDepth {
 						// Add new job before sending to channel
-						jobsWg.Add(1)
+						jobsWaitGroup.Add(1)
 						jobs <- Job{URL: fullURL + "/", Depth: job.Depth + 1}
 					}
 				}
 			}
-			jobsWg.Done()
+			jobsWaitGroup.Done()
 		}
 	}
 
-	wg.Add(maxWorkers)
+	// Register maxWorkers number of goroutines with the waitGroup.
+	waitGroup.Add(maxWorkers)
+	// Launch a new worker for each iteration 
 	for i := 0; i < maxWorkers; i++ {
 		go worker()
 	}
 
 	// Start initial job
-	jobsWg.Add(1)
+	jobsWaitGroup.Add(1)
 	go func() {
 		jobs <- Job{URL: "http://" + targetDomain + "/", Depth: 0}
 	}()
 
-	// Close jobs channel when all jobs are processed
+	// Close the jobs channel when all jobs are processed
 	go func() {
-		jobsWg.Wait()
+		jobsWaitGroup.Wait()
 		close(jobs)
 	}()
-
+	
+	// Collect results
 	foundDirs := make([]*DirResult, 0)
 	done := make(chan struct{})
 
@@ -203,8 +229,9 @@ func GetDirs(targetDomain string, isRecursive bool, maxDepth int, wordlistPath s
 		}
 		done <- struct{}{}
 	}()
-
-	wg.Wait()
+	
+	// Wait for all workers and finish
+	waitGroup.Wait()
 	close(results)
 	<-done
 
@@ -214,6 +241,7 @@ func GetDirs(targetDomain string, isRecursive bool, maxDepth int, wordlistPath s
 		fmt.Printf("%d) %s [Status: %d]\n", i+1, dir.URL, dir.StatusCode)
 	}
 
-	fmt.Printf("\nDuration: %.2f seconds.\n", time.Since(startTime).Seconds())
-	log.Printf("Directory enumeration completed. Duration: %.2f seconds.", time.Since(startTime).Seconds())
+	// Calculate and print the duration of scan
+	duration := time.Since(startTime).Seconds()
+	fmt.Printf("\nDuration: %.2f seconds.\n", duration)
 }

@@ -13,21 +13,19 @@ func main() {
 	gatherDomainInfo := flag.Bool("gdi", false, "Gather information about the target domain.")
 	dnsEnum := flag.Bool("dns", false, "Enumerate subdomains.")
 	dirEnum := flag.Bool("dir", false, "Enumerate directories.")
-	wordlist := flag.String("wordlist", "wordlist.txt", "Path to your wordlist file.")
-	recursiveDepth := flag.Int("r", 3, "Max recursion depth for directory enumeration.")
-
+	wordlist := flag.String("w", "wordlist.txt", "Path to your wordlist file.")
+	recursiveDepth := flag.Int("r", 0, "Max recursion depth for directory enumeration.")
 	flag.Usage = func() {
 		fmt.Println("Usage: dnscope [flags]")
 		flag.PrintDefaults()
 		fmt.Println("\nExamples:")
 		fmt.Println("  dnscope -domain=example.com -gdi")
-		fmt.Println("  dnscope -domain=example.com -dns -wordlist=subdomains.txt")
-		fmt.Println("  dnscope -domain=example.com -dir -wordlist=dirs.txt")
-		fmt.Println("  dnscope -domain=example.com -gdi -dns -wordlist=subdomains.txt")
-		fmt.Println("  dnscope -domain=example.com -gdi -dir -wordlist=dirs.txt")
-		fmt.Println("  dnscope -domain=example.com -gdi -dir -wordlist=dirs.txt -r=3")
+		fmt.Println("  dnscope -domain=example.com -dns -w=subdomains.txt")
+		fmt.Println("  dnscope -domain=example.com -dir -w=dirs.txt")
+		fmt.Println("  dnscope -domain=example.com -gdi -dns -w=subdomains.txt")
+		fmt.Println("  dnscope -domain=example.com -gdi -dir -w=dirs.txt")
+		fmt.Println("  dnscope -domain=example.com -gdi -dir -w=dirs.txt -r=3")
 	}
-
 	flag.Parse()
 
 	// Validate required domain
@@ -53,22 +51,16 @@ func main() {
 
 	// Run requested modules
 	if *gatherDomainInfo {
-		fmt.Println("Gathering domain information for", *domain)
 		modules.GetDomainInfo(*domain)
 	}
-
 	if *dnsEnum {
-		fmt.Println("Enumerating subdomains for", *domain, "using", *wordlist)
 		modules.GetSubdomains(*domain, *wordlist)
 	}
-
 	if *dirEnum {
 		isRecursive := false
 		if *recursiveDepth > 0 {
 			isRecursive = true
 		}
-		fmt.Printf("Enumerating directories for %s using %s (recursive: %v, depth: %d)\n",
-			*domain, *wordlist, isRecursive, *recursiveDepth)
 		modules.GetDirs(*domain, isRecursive, *recursiveDepth, *wordlist, 30)
 	}
 }

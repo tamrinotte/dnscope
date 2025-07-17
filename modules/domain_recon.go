@@ -212,13 +212,13 @@ func GetWHOIS(targetDomainName string) {
 // ##############################
 
 func GetDomainInfo(targetDomainName string) {
-	start := time.Now()
+	startTime := time.Now()
 
 	GetIPAddresses(targetDomainName)
 	GetNameservers(targetDomainName)
 	GetMXRecords(targetDomainName)
 	GetWHOIS(targetDomainName)
 
-	duration := time.Since(start).Seconds()
-	fmt.Printf("Domain reconnaissance completed in %.2f seconds.\n", duration)
+	duration := time.Since(startTime).Seconds()
+	fmt.Printf("\nDuration: %.2f seconds.\n", duration)
 }
