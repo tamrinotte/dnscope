@@ -1,5 +1,5 @@
 # DNScope
-![DNScopeLogo](https://raw.githubusercontent.com/tamrinotte/dnscope/python/app_images/dnscope_logo.png)
+![DNScopeLogo](https://raw.githubusercontent.com/tamrinotte/dnscope/main/app_images/dnscope_logo.png)
 
 DNScope is a lightweight reconnaissance utility designed for cybersecurity professionals, penetration testers, and digital investigators. The tool automates domain related metadata retrieval, DNS enumeration, and directory enumeration, providing a comprehensive snapshot of a target domain’s public-facing infrastructure and accessible directories.
 
@@ -13,7 +13,7 @@ Built to be clean, efficient, and easily portable, DNScope helps analysts uncove
 
 	- Kali
 
-	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_kali_v0.1.3/dnscope.deb -o dnscope.deb
+	      curl -L https://github.com/tamrinotte/dnscope/releases/download/kali_v0.1.3/dnscope.deb -o dnscope.deb
 
 2) Start the installer.
 
@@ -64,7 +64,7 @@ __-mw MAX_WORKER, --max_worker MAX_WORKER:__ Maximum amount of workers.
 ---
 
 # DNScope
-![DNScopeLogo](https://raw.githubusercontent.com/tamrinotte/dnscope/python/app_images/dnscope_logo.png)
+![DNScopeLogo](https://raw.githubusercontent.com/tamrinotte/dnscope/main/app_images/dnscope_logo.png)
 
 DNScope, siber güvenlik uzmanları, sızma testi uzmanları ve dijital araştırmacılar için tasarlanmış hafif bir keşif aracıdır. Bu araç, alan adıyla ilgili meta verilerin alınması, DNS taraması ve dizin taraması işlemlerini otomatikleştirerek, hedef alan adının halka açık altyapısı ve erişilebilir dizinleri hakkında kapsamlı bir görünüm sunar.
 
@@ -77,7 +77,7 @@ Temiz, verimli ve taşınabilir olacak şekilde geliştirilen DNScope, analistle
 
 	- Kali
 
-	      curl -L https://github.com/tamrinotte/dnscope/releases/download/python_kali_v0.1.3/dnscope.deb -o dnscope.deb
+	      curl -L https://github.com/tamrinotte/dnscope/releases/download/kali_v0.1.3/dnscope.deb -o dnscope.deb
 
 2) Yükleyiciyi başlatın.
 
