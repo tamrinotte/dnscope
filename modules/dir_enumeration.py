@@ -1,24 +1,23 @@
-# This Python file uses the following encoding: utf-8
+# -*- coding: utf-8 -*-
 
 # MODULES AND/OR LIBRARIES
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from time import time, sleep
-from modules.logging_config import debug, info, error
-from requests import get as reqget, RequestException
-from random import choice as randomchoice
-from pathlib import Path
-from queue import Queue
-from json import load as jsonload
-from os import cpu_count
+import time
+import requests
+import random
+import pathlib
+import concurrent.futures
+import json
+import queue
+from modules.logging_config import debug, error
 
 ##############################
 
-# GLOBAL VARIABLES
+# CONSTANTS
 
 ##############################
 
-current_dir = Path(__file__).parent
-fake_user_agents_file_path = Path(current_dir.parent, "data", "fake_user_agents.json")
+current_dir = pathlib.Path(__file__).parent
+fake_user_agents_file_path = pathlib.Path(current_dir.parent, "data", "fake_user_agents.json")
 
 ##############################
 
@@ -29,7 +28,7 @@ fake_user_agents_file_path = Path(current_dir.parent, "data", "fake_user_agents.
 def load_json(json_file_path):
     try:
         with open(json_file_path, "r", encoding="utf-8") as file:
-            return jsonload(file)
+            return json.load(file)
     except Exception as e:
         error(f"Failed to load JSON file {json_file_path}: {e}")
         return {"user_agents": []}
@@ -40,24 +39,24 @@ def load_json(json_file_path):
 
 ##############################
 
-def get_dir(url, fake_user_agents, timeout=2.5, retries=1):
-    user_agent = randomchoice(fake_user_agents) if fake_user_agents else "Mozilla/5.0"
+def get_dir(url, fake_user_agent, timeout=2.5, retries=1):
     headers = {
-        "User-Agent": user_agent,
+        "User-Agent": fake_user_agent,
         "Referer": url,
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-        "Accept-Language": "en-US,en;q=0.9"
+        "Accept-Language": "en-US,en;q=0.9",
     }
+    
     for attempt in range(retries + 1):
         try:
-            response = reqget(url, headers=headers, timeout=timeout)
-            if response.status_code in [200, 301, 302, 403]:
+            response = requests.get(url, headers=headers, timeout=timeout)
+            if response.status_code in (200, 301, 302, 403):
                 return (url, response.status_code)
             return None
-        except RequestException as e:
+        except requests.RequestException as e:
             debug(f"Request to {url} failed (attempt {attempt+1}/{retries+1}): {e}")
             if attempt < retries:
-                sleep(0.3)
+                time.sleep(0.2)
             else:
                 return None
 
@@ -67,51 +66,53 @@ def get_dir(url, fake_user_agents, timeout=2.5, retries=1):
 
 ##############################
 
-def get_dirs(target_domain_name, is_recursive, max_depth, wordlist_path, max_workers=30):
-    start_time = time()
+def get_dirs(max_workers, target_domain_name, is_recursive, max_depth, wordlist_path):
+    start_time = time.time()
+    directories = set()
     json_data = load_json(fake_user_agents_file_path)
     fake_user_agents = json_data.get("user_agents", [])
-    found_dirs = []
+    user_agent = random.choice(fake_user_agents) if fake_user_agents else "Mozilla/5.0"
+
+    with open(wordlist_path, "r", encoding="utf-8") as wordlist_file:
+        dir_list = [line.strip() for line in wordlist_file if line.strip()]
+
+    dirs_to_scan = queue.Queue()
+    dirs_to_scan.put((f"http://{target_domain_name}/", 0))
+
+    print(f"[+] Starting directory enumeration for: {target_domain_name}")
+    print(f"[+] Wordlist: {wordlist_path}")
+    print(f"[+] Max number of workers: {max_workers}")
+    print(f"[+] Max depth: {max_depth}")
 
     try:
-        with open(wordlist_path, 'r', encoding="utf-8") as wordlist_file:
-            dir_list = [line.strip() for line in wordlist_file if line.strip()]
-
-        dirs_to_scan = Queue()
-        dirs_to_scan.put((f"http://{target_domain_name}/", 0))
-
-        with ThreadPoolExecutor(max_workers=max_workers or cpu_count() * 2) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
             while not dirs_to_scan.empty():
                 base_url, depth = dirs_to_scan.get()
                 if depth > max_depth:
                     continue
 
-                futures = {
-                    executor.submit(get_dir, f"{base_url}{directory}", fake_user_agents): directory
-                    for directory in dir_list
-                }
+                # Submit all jobs and keep the Future objects
+                futures = {}
+                for directory in dir_list:
+                    future = executor.submit(get_dir, f"{base_url}{directory}", user_agent)
+                    futures[future] = directory
 
                 new_discovered = []
 
-                for future in as_completed(futures):
+                for future in concurrent.futures.as_completed(futures):
                     result = future.result()
                     if result:
                         url, status = result
-                        found_dirs.append((url, status))
+                        directories.add((url, status))
                         if is_recursive:
                             new_discovered.append((f"{url}/", depth + 1))
 
                 for item in new_discovered:
                     dirs_to_scan.put(item)
-
-        print("=== Discovered Directories ===")
-        for index, (url, status_code) in enumerate(found_dirs, start=1):
-            print(f"{index}) {url} [Status: {status_code}]")
-
-        duration = time() - start_time
-        print(f"\nDuration: {duration:.2f} seconds.")
-        info(f"Directory enumeration completed. Duration: {duration:.2f} seconds.")
-
-    except Exception as e:
-        error(f"Error during directory enumeration: {e}")
-        print("=== Discovered Directories ===\nNone found due to an error.")
+    except KeyboardInterrupt:
+        print("\n[!] Enumeration interrupted. Returning partial results.\n")
+    finally:
+        duration = time.time() - start_time
+        print(f"\n[✓] Enumeration complete. Duration: {duration:.2f} seconds.")
+        print(f"Total unique directories found: {len(directories)}\n")
+        return directories

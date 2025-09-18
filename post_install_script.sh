@@ -1,7 +1,11 @@
-#!/bin/bash
+#!/usr/bin/bash
 
-# Get the username
-username=${SUDO_USER:-${USER}}
+main () {
+    # Get the username
+    username=${SUDO_USER:-${USER}}
 
-# Change the file's ownership
-chown $username:$username "/usr/bin/dnscope"
+    # Change the file's ownership
+    chown $username:$username "/usr/bin/dnscope"
+}
+
+main

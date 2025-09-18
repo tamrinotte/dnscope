@@ -1,9 +1,9 @@
-# This Python file uses the following encoding: utf-8
+# -*- coding: utf-8 -*-
 
 # MODULES AND/OR LIBRARIES
-from socket import gethostbyname
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from time import time
+import socket
+import concurrent.futures
+import time
 from modules.logging_config import debug, info, error
 
 ##############################
@@ -14,7 +14,7 @@ from modules.logging_config import debug, info, error
 
 def resolve_subdomain(subdomain):
     try:
-        gethostbyname(subdomain)
+        socket.gethostbyname(subdomain)
         return subdomain
     except:
         return None
@@ -25,26 +25,28 @@ def resolve_subdomain(subdomain):
 
 ##############################
 
-def get_subdomains(target_domain_name, wordlist_path):
-    start_time=time()
-    subdomains = []
+def get_subdomains(max_workers, target_domain_name, wordlist_path):
+    start_time=time.time()
+    subdomains = set()
+
+    with open(wordlist_path, 'r') as f:
+        subdomain_list = [line.strip() + "." + target_domain_name for line in f]
+
+    print(f"[+] Starting DNS enumeration for: {target_domain_name}")
+    print(f"[+] Wordlist: {wordlist_path}")
+    print(f"[+] Max number of workers: {max_workers}")
+
     try:
-        with open(wordlist_path, 'r') as f:
-            subdomain_list = [line.strip() + "." + target_domain_name for line in f]
-        with ThreadPoolExecutor(max_workers=20) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = {executor.submit(resolve_subdomain, sub): sub for sub in subdomain_list}
-            for future in as_completed(futures):
+            for future in concurrent.futures.as_completed(futures):
                 result = future.result()
                 if result:
-                    subdomains.append(result)
-        print("=== Subdomains ===")
-        for index, subdomain in enumerate(subdomains, start=1):
-            print(f"{index}) {subdomain}")
-        end_time = time()
-        duration = end_time - start_time
-        print(f"\nDuration: {duration:.2f} seconds.")
-        info(f"Subdomain enumeration has been completed. Duration: {duration:.2f} seconds.")
-    except Exception as e:
-        error(f"Error: {e}")
-        print("=== Subdomains ===")
-        print()
+                    subdomains.add(result)
+    except KeyboardInterrupt:
+        print("\n[!] Enumeration interrupted. Returning partial results.\n")
+    finally:
+        duration = time.time() - start_time
+        print(f"\n[✓] Enumeration complete. Duration: {duration:.2f} seconds.")
+        print(f"Total unique directories found: {len(subdomains)}\n")
+        return subdomains

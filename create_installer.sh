@@ -1,63 +1,88 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 
 set -euo pipefail
 
-# Variables
-APP_NAME="dnscope"
-VERSION="0.1.0"
-USERNAME="${SUDO_USER:-${USER}}"
-BUILD_DIRS=("dist" "build" "package")
-INSTALLER="${APP_NAME}.deb"
-
-# Function to print status messages
-function info() {
-    echo -e "\e[1;34m[INFO]\e[0m $1"
+main() {
+    declare_variables
+    purge_the_app
+    delete_the_old_files
+    create_a_new_executable_file
+    package_the_tool
+    create_installer
+    start_the_installer
+    print_info_message "Installation complete."
 }
 
-# Purge existing installation if present
-info "Purging existing installation of ${APP_NAME} (if installed)..."
-if dpkg -l | grep -q "^ii  ${APP_NAME} "; then
-    sudo apt purge --autoremove -y "${APP_NAME}"
-else
-    info "No existing installation found."
-fi
+print_info_message() {
+    echo -e "\e[1;34m[INFO]\e[0m ${1}"
+}
 
-# Clean old build artifacts
-for dir in "${BUILD_DIRS[@]}"; do
-    if [[ -d "$dir" ]]; then
-        info "Removing existing directory: $dir"
-        rm -rf "$dir"
+declare_variables() {
+    app_name="dnscope"
+    version="0.1.3"
+    username="${SUDO_USER:-${USER}}"
+    build_dirs=("dist" "build" "package")
+    installer="${app_name}.deb"
+    package_base_dir="package"
+    package_usr_bin_dir="${package_base_dir}/usr/bin"
+}
+
+purge_the_app() {
+    # Purge existing installation if present
+    print_info_message "Purging existing installation of ${app_name} (if installed)..."
+    if dpkg -l | grep -q "^ii  ${app_name} "; then
+        sudo apt purge --autoremove -y "${app_name}"
+    else
+        print_info_message "No existing installation found."
     fi
-done
+}
 
-if [[ -f "$INSTALLER" ]]; then
-    info "Removing existing installer: $INSTALLER"
-    rm -f "$INSTALLER"
-fi
+delete_the_old_files() {
+    # Clean old build artifacts
+    for dir in "${build_dirs[@]}"; do
+        if [[ -d "${dir}" ]]; then
+            print_info_message "Removing existing directory: ${dir}"
+            rm -rf "${dir}"
+        fi
+    done
 
-# Create executable
-info "Creating standalone executable using PyInstaller..."
-pyinstaller --onefile --name=dnscope dnscope.py --collect-all=dns --collect-all=whois
+    if [[ -f "${installer}" ]]; then
+        print_info_message "Removing existing installer: ${installer}"
+        rm -f "${installer}"
+    fi
+}
 
-# Setup package structure
-info "Creating package directory hierarchy..."
-mkdir -p "package/usr/bin"
+create_a_new_executable_file() {
+    # Create executable
+    print_info_message "Creating standalone executable using PyInstaller..."
+    pyinstaller --onefile --name=dnscope "${app_name}.py" --collect-all=dns --collect-all=whois
+}
 
-# Move executable
-info "Copying executable to package directory..."
-cp "dist/${APP_NAME}" "package/usr/bin/"
+package_the_tool() {
+    # Setup package structure
+    print_info_message "Creating package directory hierarchy..."
+    mkdir -p "${package_usr_bin_dir}"
 
-# Set permissions and ownership
-info "Setting permissions and ownership for package directory..."
-chmod 755 -R "package/"
-chown "${USERNAME}:${USERNAME}" -R "package/"
+    # Move executable
+    print_info_message "Copying executable to package directory..."
+    cp "dist/${app_name}" "${package_usr_bin_dir}"
 
-# Build Debian installer with FPM
-info "Creating Debian installer with FPM..."
-fpm -C "package" -s dir -t deb -n "${APP_NAME}" -v "${VERSION}" -p "${INSTALLER}" --after-install "post_install_script.sh"
+    # Set permissions and ownership
+    print_info_message "Setting permissions and ownership for package directory..."
+    chmod 755 -R "${package_base_dir}"
+    chown "${username}:${username}" -R "${package_base_dir}"
+}
 
-# Install generated package
-info "Installing the new ${APP_NAME} package..."
-sudo dpkg -i "${INSTALLER}"
+create_installer() {
+    # Build Debian installer with FPM
+    print_info_message "Creating Debian installer with FPM..."
+    fpm -C "${package_base_dir}" -s dir -t deb -n "${app_name}" -v "${version}" -p "${installer}" --after-install "post_install_script.sh"
+}
 
-info "Installation complete."
+start_the_installer() {
+    # Install generated package
+    print_info_message "Installing the new ${app_name} package..."
+    sudo dpkg -i "${installer}"
+}
+
+main
